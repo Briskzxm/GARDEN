@@ -17,8 +17,10 @@ install.packages('mclust')
 ```
 Next, we will set up the environment required for GARDEN：
 ```
+git clone git@github.com:Briskzxm/GARDEN.git
+python setup.py build
+python setup.py install 
 pip install -r requirements.txt
-pip install GARDEN
 ```
 **Note:** During the installation process, you might encounter issues with the installation of `torch_sparse`, `torch_scatter`, or `torch_geometric`. If this happens, you will need to manually download the `.whl` files from [PyTorch Geometric WHL](https://pytorch-geometric.com/whl/). 
 
