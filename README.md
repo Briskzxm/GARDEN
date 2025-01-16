@@ -18,6 +18,7 @@ install.packages('mclust')
 Next, we will set up the environment required for GARDEN：
 ```
 git clone git@github.com:Briskzxm/GARDEN.git
+cd <Path_to_GARDEN>
 python setup.py build
 python setup.py install 
 pip install -r requirements.txt
@@ -34,6 +35,7 @@ Input data of GARDEN :
 - The input files include various data formats, with `h5ad` being a representative example containing spatial transcriptomics data with spatial coordinates stored in `.obsm[‘spatial’]`.
 ```
 import scanpy as sc
+from GARDEN import GARDEN
 file_path = '/home/user/data/spatial_data.h5ad'
 adata = sc.read(file_path)
 ```
