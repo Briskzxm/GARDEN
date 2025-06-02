@@ -23,7 +23,7 @@ python setup.py build
 python setup.py install 
 pip install -r requirements.txt
 ```
-**Note:** During the installation process, you might encounter issues with the installation of `torch_sparse`, `torch_scatter`, or `torch_geometric`. If this happens, you will need to manually download the `.whl` files from [PyTorch Geometric WHL](https://pytorch-geometric.com/whl/). 
+**Note:** During the installation process, you might encounter issues with the installation of `torch_sparse`, `torch_scatter`,`torch_cluster` or `torch_geometric`. If this happens, you will need to manually download the `.whl` files from [PyTorch Geometric WHL](https://pytorch-geometric.com/whl/). 
 
 Once downloaded, install the files using the following command (replace `<file_name>.whl` with the actual filename of the `.whl` file):
 ```
