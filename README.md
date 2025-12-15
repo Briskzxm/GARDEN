@@ -1,73 +1,156 @@
-# GARDEN
-
-`GARDEN` is a Python package for quantitative characterization and interpretation of rare spatial heterogeneity from spatial omics data. 
+# Robust Characterization and Interpretation of Rare Pathogenic Cell Populations from Spatial Omics using GARDEN
+--- 
+## 1. Overview
+`GARDEN` is a Python package for quantitative characterization and interpretation of rare spatial heterogeneity from spatial omics data.
 
 ![View the PDF](./Framework.jpg)
 
-### Installation
+---
+## 2. Installation & Environment Setup
+
 **Note:** Before using the `mclust` algorithm, ensure that the `mclust` package is installed in R and that `os.environ['R_HOME']` is configured with the correct path by following these steps:
 
-```
-conda create -n GARDEN_env python=3.8
-conda activate GARDEN_env
-conda install r-base
-pip install rpy2==3.4.1
-R --quiet --no-restore
-install.packages('mclust')
-```
-Next, we will set up the environment required for GARDEN：
-```
-git clone git@github.com:Briskzxm/GARDEN.git
-cd <Path_to_GARDEN>
-python setup.py build
-python setup.py install 
-pip install -r requirements.txt
-```
-**Note:** During the installation process, you might encounter issues with the installation of `torch_sparse`, `torch_scatter`,`torch_cluster` or `torch_geometric`. If this happens, you will need to manually download the `.whl` files from [PyTorch Geometric WHL](https://pytorch-geometric.com/whl/). 
+1. **Create and activate a new conda environment:**
+   ```bash
+   conda create -n GARDEN_env python=3.8
+   conda activate GARDEN_env
+   ```
 
-Once downloaded, install the files using the following command (replace `<file_name>.whl` with the actual filename of the `.whl` file):
-```
-pip install <file_name>.whl
-```
+2. **Install R and necessary packages:**
+   ```bash
+   conda install r-base
+   pip install rpy2==3.4.1
+   R --quiet --no-restore
+   install.packages('mclust')
+   ```
 
-### Usage
-Input data of GARDEN :
-- The input files include various data formats, with `h5ad` being a representative example containing spatial transcriptomics data with spatial coordinates stored in `.obsm[‘spatial’]`.
-```
+3. **Clone the GARDEN repository and install dependencies:**
+   ```bash
+   git clone git@github.com:Briskzxm/GARDEN.git
+   cd <Path_to_GARDEN>
+   python setup.py build
+   python setup.py install 
+   pip install -r requirements.txt
+   ```
+
+4. **Optional – Manual installation of PyTorch Geometric dependencies:**
+   If you encounter issues installing `torch_sparse`, `torch_scatter`, `torch_cluster`, or `torch_geometric`, manually download the corresponding `.whl` files from [PyTorch Geometric WHL](https://pytorch-geometric.com/whl/) and install them:
+   ```bash
+   pip install <file_name>.whl
+   ```
+
+---
+
+## 3. Quick Start
+
+### Input Data
+The input files can be in various formats, with `h5ad` being a typical example containing spatial transcriptomics data. Spatial coordinates are usually stored in `adata.obsm['spatial']`. We use the `scanpy` library to read and process such data, which enables convenient access to spatial information and gene expression matrices.
+
+```python
+# Import necessary libs
 import scanpy as sc
 from GARDEN import GARDEN
+
+# Read the h5ad file
 file_path = '/home/user/data/spatial_data.h5ad'
 adata = sc.read(file_path)
 ```
 
-The definition and training step of GARDEN are carried out as follows:
-```
-# model definition  
-model = GARDEN.GARDEN(adata,device=device)
-# model training
+### Model Definition and Training
+- Direct Training on Full Dataset
+```python
+# Define the model
+model = GARDEN.GARDEN(adata, device=device)
+# Train the model
 adata = model.train()
 ```
 
-Subsequently, clustering analysis can be performed using algorithms such as `mclust` or `leiden`.
-
+- Batch Training for Large Dataset
+```python
+# Define the batch training model
+model = GARDEN.GARDEN_Batch(adata, datatype='HD')
+# Train the model
+adata = model.train_expand(batch_number=10)
 ```
-# Apply clustering algorithm
+
+### Clustering
+After training, apply clustering algorithms such as `mclust` or `leiden`:
+```python
+# Import clustering functions
 from GARDEN.utils import clustering
+# Clustering results are stored in adata.obs['domain']
 clustering(adata, n_clusters)
 ```
-Subsequently, clustering analysis can be performed using algorithms such as `mclust` or `leiden`.
+### Alignment
+- Define Alignment Model and Train
 
-For spatial transcriptome datasets with high memory demands, we used batch training to run the model. 
+```python
+# Import necessary libs and read data.
+from GARDEN_Align import *
+adata1 = sc.read('slice1.h5ad')
+adata2 = sc.read('slice2.h5ad')
 
+# Define align model and train model 
+# Args should be configured before running. See the tutorial for details.
+model = GARDEN_Align(adata1,adata2,args)
+out1,out2,similarity = model.train()
 ```
-# Batch Train
-model = GARDEN.GARDEN_Batch(adata, datatype = 'HD')
-adata = model.train_expand(batch_number = 10)
+- Obtaining Aligned Coordinates by Affine Transforming Slice Coordinates
+
+```python
+# By default, only rotates the first adata.
+adata1_aligned = align_slice(adata1, adata2, pis = similarity)
 ```
 
 
-## Tutorial
-Please see the Jupyter notebook in the **Tutorial** folder. It includes several tutorials, providing examples across different species, sequencing technologies, and diseases.
+### Optional - Direct Script Execution
+We also provide convenient Python scripts for direct execution. You can run the entire pipeline with a single command in your terminal:
 
-## License
+```bash
+# Clustering
+python run_garden.py
+# Alignment
+python run_garden_alignment.py 
+```
+
+#### Execution Order Note
+You can adjust the order of script execution based on your analysis needs:
+- For **clustering first, then alignment**, first run `run_garden.py`, then `run_garden_alignment.py`.
+- For **alignment first, then clustering**, first run `run_garden_alignment.py`, then `run_garden.py`.
+
+---
+## 4. Step-by-Step Tutorials
+
+We provide step-by-step tutorials in the `Tutorial` folder to help users get started. Each tutorial is designed as a self-contained Jupyter notebook with example datasets that download automatically.
+
+### Tutorial Descriptions
+
+- **`Tutorial_10x_Visium.ipynb`** – Demonstrates the complete clustering workflow for standard 10x Visium data, from data preprocessing to visualization of spatial domains.
+
+- **`Tutorial_STARmap_PLUS.ipynb`** – Guides you through clustering high-resolution in situ sequencing data, highlighting adaptations for higher spatial resolution datasets.
+
+- **`Tutorial_Alignment.ipynb`** – Explores methods for aligning multiple spatial omics datasets, enabling comparative analysis across technologies or conditions.
+
+---
+
+## 5. Reproducible Analysis
+
+To ensure the transparency and reproducibility of our findings, we provide complete analysis scripts that regenerate the key results and figures presented in the manuscript. These scripts utilize publicly accessible datasets and are organized in the `Reproducible_Analysis/` directory.
+
+
+### Modular Analysis Workflows
+We provide task-specific Python scripts for essential spatial omics analyses:
+
+- `Deconvolution.py` – Performs spot decomposition to recover cell-type composition within each spatial spot.
+
+- `Cell_Cell_Communication.py` – Analyzes inter-cluster communication networks, identifying ligand-receptor interactions.
+
+- `Trajectory.py` – Infers spatial trajectories and cellular dynamics.
+
+- `Hotspot.py` – Detects spatially coherent gene modules and expression hotspots.
+
+
+---
+
+## 6. License
 This project is covered under the **MIT License**.
