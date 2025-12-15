@@ -1,4 +1,5 @@
 # Robust Characterization and Interpretation of Rare Pathogenic Cell Populations from Spatial Omics using GARDEN
+[![DOI](./Zenodo.svg)](https://doi.org/10.5281/zenodo.17936254)
 --- 
 ## 1. Overview
 `GARDEN` is a Python package for quantitative characterization and interpretation of rare spatial heterogeneity from spatial omics data.
