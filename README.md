@@ -4,7 +4,7 @@
 ## 1. Overview
 `GARDEN` is a Python package for quantitative characterization and interpretation of rare spatial heterogeneity from spatial omics data.
 
-![View the PDF](./Framework.jpg)
+![View the PDF](Framework.jpg)
 
 ---
 ## 2. Installation & Environment Setup
