@@ -126,11 +126,16 @@ We provide step-by-step tutorials in the `Tutorial` folder to help users get sta
 
 ### Tutorial Descriptions
 
-- **`Tutorial_10x_Visium.ipynb`** – Demonstrates the complete clustering workflow for standard 10x Visium data, from data preprocessing to visualization of spatial domains.
+- **`Visium.ipynb`** – Demonstrates the complete clustering workflow for standard 10x Visium data, from data preprocessing to visualization of spatial domains.
 
-- **`Tutorial_STARmap_PLUS.ipynb`** – Guides you through clustering high-resolution in situ sequencing data, highlighting adaptations for higher spatial resolution datasets.
+- **`8month_control/disease.ipynb`** – Guides you through clustering high-resolution in situ sequencing data, highlighting adaptations for higher spatial resolution datasets.
 
-- **`Tutorial_Alignment.ipynb`** – Explores methods for aligning multiple spatial omics datasets, enabling comparative analysis across technologies or conditions.
+- **`Xenium_BRCA.ipynb`** – Demonstrates methods for batch-training on Xenium human breast cancer (BRCA) spatial transcrptomics dataset.
+
+
+- **`Alignment-Visium.ipynb`** – Demonstrates methods for aligning multiple spatial transcriptomics datasets generated with 10x Genomics Visium, enabling comparative analysis across different conditions or experiments.
+
+- **`Alignment-STARmap PLUS.ipynb`** – Demonstrates alignment techniques for spatial omics datasets obtained using STARmap PLUS, facilitating systematic comparison across technologies or experimental conditions.
 
 ---
 
@@ -140,15 +145,30 @@ To ensure the transparency and reproducibility of our findings, we provide compl
 
 
 ### Modular Analysis Workflows
-We provide task-specific Python scripts for essential spatial omics analyses:
+We provide task-specific Python and R scripts for essential spatial omics analyses:
 
-- `Deconvolution.py` – Performs spot decomposition to recover cell-type composition within each spatial spot.
+- `Cell-network.R` – Visualizes spatial proximity between two cell types using **MERINGUE**.
 
-- `Cell_Cell_Communication.py` – Analyzes inter-cluster communication networks, identifying ligand-receptor interactions.
+- `Coappear.py` – Computes cluster co-occurrence probabilities using **squidpy**.
 
-- `Trajectory.py` – Infers spatial trajectories and cellular dynamics.
+- `LR-analysis.py` – Performs receptor–ligand interaction analysis using **squidpy**.
 
-- `Hotspot.py` – Detects spatially coherent gene modules and expression hotspots.
+- `Deconvolution.py` – Deconvolves spatial spots using **GraphST** to recover cell-type identities.
+
+- `Tangram.py` – Maps single-cell data onto spatial data using **Tangram**.
+
+- `Cell_Cell_Communication.py` – Identifies inter-cluster ligand–receptor interactions using **CellChat**.
+
+- `Trajectory.py` – Infers spatial trajectories using **VIA**.
+
+- `Hotspot.py` – Identifies spatial gene modules and hotspots using **Stereopy**.
+
+- `Spateo-3D.py` – Reconstructs and visualizes 3D tissue architecture using **Spateo**.
+
+- `CSI-heatmap.py` – Visualizes Connection Specificity Index between transcription factors.
+
+- `Correlation.R` – Calculates correlation between proportions of spots occupied by two cell types.
+
 
 
 ---
