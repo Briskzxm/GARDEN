@@ -175,3 +175,9 @@ We provide task-specific Python and R scripts for essential spatial omics analys
 
 ## 6. License
 This project is covered under the **MIT License**.
+
+---
+
+## 7. Citiation
+Zhang, X., Yu, Z., Hao, G. et al. Robust characterization and interpretation of rare pathogenic cell populations from spatial omics using GARDEN. Nat Commun (2026). https://doi.org/10.1038/s41467-026-68500-6
+
